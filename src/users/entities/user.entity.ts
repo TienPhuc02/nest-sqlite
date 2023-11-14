@@ -35,7 +35,7 @@ export class User {
   updatedAt: Date;
   @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt: Date;
-  @Column({ default: false })
+  @Column({ name: 'deleted', default: false })
   deleted: boolean;
 }
 

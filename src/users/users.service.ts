@@ -4,6 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import aqp from 'api-query-params';
 
 @Injectable()
 export class UsersService {
@@ -39,19 +40,66 @@ export class UsersService {
     };
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll(current: number, pageSize: number, qs: string) {
+    const { filter, sort } = aqp(qs);
+    delete filter.current;
+    delete filter.pageSize;
+    const offset: number = (+current - 1) * +pageSize;
+    const defaultLimit = +pageSize ? +pageSize : 10;
+
+    const [result, totalItems] = await this.usersRepository.findAndCount({
+      where: filter,
+      order: sort,
+      skip: offset,
+      take: defaultLimit,
+    });
+
+    const totalPages = Math.ceil(totalItems / defaultLimit);
+
+    return {
+      meta: {
+        current: current, //trang hien tai
+        pageSize: pageSize, // so luong ban ghi 1 trang
+        pages: totalPages, //tong so trang
+        total: totalItems, //tong so ban ghi
+      },
+      result,
+    };
+  }
+  async findOne(id: number) {
+    const userToUpdate = await this.usersRepository.findOne({
+      where: { id: id },
+    });
+    if (!userToUpdate) {
+      throw new Error('User not found');
+    } else {
+      return userToUpdate;
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const userToUpdate = await this.usersRepository.findOne({
+      where: { id: id },
+    });
+    if (!userToUpdate) {
+      throw new Error('User not found');
+    }
+    const updatedUser = await this.usersRepository.save({
+      ...userToUpdate,
+      ...updateUserDto,
+    });
+    return updatedUser;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    const userToRemove = await this.usersRepository.findOne({
+      where: { id: id },
+    });
+    if (!userToRemove) {
+      throw new Error('User not found');
+    }
+    userToRemove.deleted = true;
+    await this.usersRepository.save(userToRemove);
+    await this.usersRepository.softDelete(id);
   }
 }
