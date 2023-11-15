@@ -1,20 +1,20 @@
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty } from 'class-validator';
 
 export class CreateUserDto {
- @IsNotEmpty({message:"Please Enter Your FirstName"})
+  @IsNotEmpty({ message: 'Please Enter Your FirstName' })
   firstName: string;
-  @IsNotEmpty({message:"Please Enter Your lastName"})
+  @IsNotEmpty({ message: 'Please Enter Your lastName' })
   lastName: string;
-  @IsNotEmpty({message:"Please Enter Your phoneNumber"})
+  @IsNotEmpty({ message: 'Please Enter Your phoneNumber' })
   phoneNumber: string;
-  @IsNotEmpty({message:"Please Enter Your password"})
+  @IsNotEmpty({ message: 'Please Enter Your password' })
   password: string;
-  @IsNotEmpty({message:"Please Enter Your password"})
+  @IsNotEmpty({ message: 'Please Enter Your password' })
   gender: string;
-  @IsNotEmpty({message:"Please Enter Your passwordConfirm"})
+  @IsNotEmpty({ message: 'Please Enter Your passwordConfirm' })
   passwordConfirm: string;
-  @IsNotEmpty({message:"Please Enter Your name"})
+  @IsNotEmpty({ message: 'Please Enter Your name' })
   name: string;
-  @IsNotEmpty({message:"Please Enter Your emailAddress"})
+  @IsNotEmpty({ message: 'Please Enter Your emailAddress' })
   emailAddress: string;
 }

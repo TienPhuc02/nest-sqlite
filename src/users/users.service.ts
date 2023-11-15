@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
@@ -71,12 +71,23 @@ export class UsersService {
       where: { id: id },
     });
     if (!userToUpdate) {
-      throw new Error('User not found');
+      throw new BadRequestException('User not found');
     } else {
       return userToUpdate;
     }
   }
-
+  async findOneByUsername(username: string) {
+    try {
+      const findUsername = await this.usersRepository.findOne({
+        where: { userName: username },
+      });
+      console.log('User found:', findUsername);
+      return findUsername;
+    } catch (error) {
+      console.error('Error finding user by username:', error);
+      throw new BadRequestException('User not found');
+    }
+  }
   async update(id: number, updateUserDto: UpdateUserDto) {
     const userToUpdate = await this.usersRepository.findOne({
       where: { id: id },
