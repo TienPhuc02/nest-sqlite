@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto, RegisterUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -19,8 +19,7 @@ export class UsersService {
       lastName,
       name,
       gender,
-      password,
-      passwordConfirm,
+      book,
       phoneNumber,
     } = createUserDto;
     const newUser = await this.usersRepository.save({
@@ -28,9 +27,9 @@ export class UsersService {
       firstName,
       lastName,
       name,
+      book,
       gender,
-      password,
-      passwordConfirm,
+      password: '123456',
       phoneNumber,
       userName: phoneNumber,
     });
@@ -112,5 +111,32 @@ export class UsersService {
     userToRemove.deleted = true;
     await this.usersRepository.save(userToRemove);
     await this.usersRepository.softDelete(id);
+  }
+  async register(registerUserDto: RegisterUserDto) {
+    const {
+      emailAddress,
+      firstName,
+      lastName,
+      name,
+      gender,
+      passwordConfirm,
+      password,
+      phoneNumber,
+    } = registerUserDto;
+    if (password !== passwordConfirm) {
+      throw new BadRequestException('mat khau xac thuc khong chinh xac');
+    }
+    const newUser = await this.usersRepository.save({
+      emailAddress,
+      firstName,
+      lastName,
+      name,
+      gender,
+      password,
+      passwordConfirm,
+      phoneNumber,
+      userName: phoneNumber,
+    });
+    return newUser;
   }
 }

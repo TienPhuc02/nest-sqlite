@@ -9,7 +9,7 @@ import {
 
 @Entity('Users')
 export class User {
-  @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
+  @PrimaryGeneratedColumn({ type: 'int', name: 'user_id', unsigned: true })
   id: number;
   @Column('varchar', { name: 'first_name', length: 255 })
   firstName: string;
@@ -21,12 +21,12 @@ export class User {
   phoneNumber: string;
   @Column('varchar', { name: 'password', length: 255 })
   password: string;
-  @Column('varchar', { name: 'password_confirm', length: 255 })
-  passwordConfirm: string;
   @Column('varchar', { name: 'name', length: 255 })
   name: string;
-  @Column('varchar', { name: 'name', length: 255 })
+  @Column('varchar', { name: 'gender', length: 255 })
   gender: string;
+  @Column('varchar', { name: 'book', length: 255, default: '' })
+  book?: string;
   @Column('varchar', { name: 'email_address', length: 255 })
   emailAddress: string;
   @CreateDateColumn({ name: 'created_at' })
