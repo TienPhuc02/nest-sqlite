@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { User } from './users/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { BooksModule } from './books/books.module';
+import { Book } from './books/entities/book.entity';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -14,7 +15,7 @@ import { BooksModule } from './books/books.module';
       useFactory: (configService: ConfigService) => ({
         type: 'sqlite',
         database: configService.get('DB_URI'),
-        entities: [User],
+        entities: [User, Book],
         synchronize: true,
       }),
       inject: [ConfigService],
