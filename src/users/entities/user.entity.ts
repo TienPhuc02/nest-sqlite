@@ -1,8 +1,10 @@
+import { Book } from 'src/books/entities/book.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -37,6 +39,8 @@ export class User {
   deletedAt: Date;
   @Column({ name: 'deleted', default: false })
   deleted: boolean;
+  @OneToMany(() => Book, (book) => book.user)
+  books: Book[];
 }
 
 //https://blog.continium-labs.com/many-to-many-relations-with-typeorm-and-nestjs/
